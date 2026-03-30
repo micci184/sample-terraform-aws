@@ -1,0 +1,66 @@
+# ==============================================================================
+# Dify on AWS — Terraform Configuration
+# Copy this file to terraform.tfvars and edit as needed.
+# ==============================================================================
+
+aws_region = "us-west-2"
+
+# Dify version
+dify_image_tag               = "1.11.4"
+dify_plugin_daemon_image_tag = "0.5.2-local"
+
+# ------------------------------------------------------------------------------
+# Minimal cost configuration (~$48/month)
+# Uncomment all of the following to minimize AWS costs:
+# ------------------------------------------------------------------------------
+# use_nat_instance            = true   # $3/month vs $33/month for NAT Gateway
+# enable_aurora_scales_to_zero = true  # Aurora pauses when idle (~10s cold start)
+# is_redis_multi_az           = false  # Single AZ (no failover replica)
+# use_fargate_spot            = true   # Spot capacity (may be interrupted)
+
+# ------------------------------------------------------------------------------
+# Custom domain (requires Route53 hosted zone in your account)
+# ------------------------------------------------------------------------------
+# domain_name = "example.com"
+# sub_domain  = "dify"  # Dify will be at https://dify.example.com
+
+# ------------------------------------------------------------------------------
+# IP restrictions (applied via WAF when using CloudFront)
+# ------------------------------------------------------------------------------
+# allowed_ipv4_cidrs = ["203.0.113.0/24"]
+# allowed_ipv6_cidrs = ["2001:db8::/32"]
+
+# ------------------------------------------------------------------------------
+# CloudFront (default: true)
+# Set to false for direct ALB access (requires domain_name for HTTPS)
+# ------------------------------------------------------------------------------
+# use_cloudfront = false
+
+# ------------------------------------------------------------------------------
+# Private ALB (no internet-facing access, cannot use with CloudFront)
+# ------------------------------------------------------------------------------
+# use_cloudfront = false
+# internal_alb   = true
+
+# ------------------------------------------------------------------------------
+# Email via SES (requires domain_name)
+# ------------------------------------------------------------------------------
+# setup_email = true
+
+# ------------------------------------------------------------------------------
+# Existing VPC (skip VPC creation)
+# ------------------------------------------------------------------------------
+# vpc_id = "vpc-0123456789abcdef0"
+
+# ------------------------------------------------------------------------------
+# Closed network / isolated VPC (no internet, uses VPC endpoints)
+# ------------------------------------------------------------------------------
+# vpc_isolated   = true
+# use_cloudfront = false
+# internal_alb   = true
+
+# ------------------------------------------------------------------------------
+# Private ECR repository (instead of Docker Hub)
+# Run copy-to-ecr script before deployment.
+# ------------------------------------------------------------------------------
+# custom_ecr_repository_name = "my-dify-images"
