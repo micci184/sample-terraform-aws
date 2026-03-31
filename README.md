@@ -87,7 +87,7 @@ terraform plan
 terraform apply
 ```
 
-After deployment, the Dify URL is shown in the `dify_url` output.
+After deployment, open the Dify URL shown in `terraform output dify_url` and create your admin account.
 
 ## Network
 

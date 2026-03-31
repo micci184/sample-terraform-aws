@@ -8,7 +8,7 @@ resource "random_password" "redis_auth" {
 }
 
 resource "aws_secretsmanager_secret" "redis_auth" {
-  name_prefix = "dify-redis-auth-"
+  name = "dify-redis-auth"
 
   tags = {
     Name = "dify-redis-auth"

@@ -82,7 +82,7 @@ resource "aws_iam_access_key" "smtp" {
 
 # Store SMTP credentials in Secrets Manager
 resource "aws_secretsmanager_secret" "smtp" {
-  name_prefix = "dify-smtp-"
+  name = "dify-smtp"
 
   tags = {
     Name = "dify-smtp"

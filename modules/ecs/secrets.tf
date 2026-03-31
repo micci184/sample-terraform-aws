@@ -6,7 +6,7 @@ resource "random_password" "encryption" {
 }
 
 resource "aws_secretsmanager_secret" "encryption" {
-  name_prefix = "dify-encryption-"
+  name = "dify-encryption"
 
   tags = {
     Name = "dify-encryption"
