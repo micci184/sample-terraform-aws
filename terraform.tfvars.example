@@ -3,16 +3,12 @@
 # Copy this file to terraform.tfvars and edit as needed.
 # ==============================================================================
 
-aws_region = "us-west-2"
+aws_region = "us-east-1"
 
 # Dify version
-dify_image_tag               = "1.11.4"
-dify_plugin_daemon_image_tag = "0.5.2-local"
+dify_image_tag               = "1.13.3"
+dify_plugin_daemon_image_tag = "0.5.4-local"
 
-# ------------------------------------------------------------------------------
-# Minimal cost configuration (~$48/month)
-# Uncomment all of the following to minimize AWS costs:
-# ------------------------------------------------------------------------------
 # use_nat_instance            = true   # $3/month vs $33/month for NAT Gateway
 # enable_aurora_scales_to_zero = true  # Aurora pauses when idle (~10s cold start)
 # is_redis_multi_az           = false  # Single AZ (no failover replica)
@@ -28,7 +24,6 @@ dify_plugin_daemon_image_tag = "0.5.2-local"
 # IP restrictions (applied via WAF when using CloudFront)
 # ------------------------------------------------------------------------------
 # allowed_ipv4_cidrs = ["203.0.113.0/24"]
-# allowed_ipv6_cidrs = ["2001:db8::/32"]
 
 # ------------------------------------------------------------------------------
 # CloudFront (default: true)

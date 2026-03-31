@@ -33,6 +33,7 @@ resource "aws_rds_cluster" "main" {
   engine_version     = "15.12"
   database_name      = "main"
 
+  master_username             = "dify"
   manage_master_user_password = true
   storage_encrypted           = true
   enable_http_endpoint        = true

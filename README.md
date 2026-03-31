@@ -69,17 +69,37 @@ Deploy [Dify](https://dify.ai/) (an open-source LLM application platform) on AWS
 git clone https://github.com/micci184/dify-on-aws-terraform.git
 cd dify-on-aws-terraform
 
-# 2. Create your configuration
+# 2. Configure Terraform backend
+# Add your S3 backend settings to versions.tf:
+#   backend "s3" {
+#     bucket = "<your-tfstate-bucket>"
+#     region = "<your-region>"
+#   }
+# Or use a separate file: terraform init -backend-config=backend.hcl
+
+# 3. Create your configuration
 cp terraform.tfvars.example terraform.tfvars
 # Edit terraform.tfvars as needed
 
-# 3. Deploy
+# 4. Deploy
 terraform init
 terraform plan
 terraform apply
 ```
 
 After deployment, the Dify URL is shown in the `dify_url` output.
+
+## Network
+
+When creating a new VPC, the following CIDR layout is used:
+
+| Subnet | CIDR |
+|--------|------|
+| VPC | `10.0.0.0/16` |
+| Public subnets | `10.0.0.0/24`, `10.0.1.0/24` |
+| Private subnets | `10.0.100.0/24`, `10.0.101.0/24` |
+
+To use an existing VPC, set `vpc_id` in `terraform.tfvars`.
 
 ## Configuration
 
@@ -99,10 +119,10 @@ Key variables in `terraform.tfvars`:
 | `setup_email` | `false` | Configure SES email (requires `domain_name`) |
 | `allowed_ipv4_cidrs` | `[]` | IP allowlist for WAF (empty = allow all) |
 
-### Minimal Cost Configuration (~$48/month)
+### Minimal Cost Configuration
 
 ```hcl
-use_nat_instance             = true   # ~$3/month vs ~$33/month
+use_nat_instance             = true
 enable_aurora_scales_to_zero = true   # Aurora pauses when idle
 is_redis_multi_az            = false  # Single AZ (no failover)
 use_fargate_spot             = true   # Spot capacity (may be interrupted)

@@ -30,7 +30,8 @@ module "security" {
 # ============================================================
 
 module "storage" {
-  source = "./modules/storage"
+  source     = "./modules/storage"
+  aws_region = var.aws_region
 }
 
 # ============================================================
@@ -40,10 +41,10 @@ module "storage" {
 module "database" {
   source = "./modules/database"
 
-  private_subnet_ids          = module.networking.private_subnet_ids
-  rds_security_group_id       = module.security.rds_security_group_id
+  private_subnet_ids           = module.networking.private_subnet_ids
+  rds_security_group_id        = module.security.rds_security_group_id
   enable_aurora_scales_to_zero = var.enable_aurora_scales_to_zero
-  aws_region                  = var.aws_region
+  aws_region                   = var.aws_region
 }
 
 # ============================================================
@@ -104,9 +105,9 @@ module "dns" {
     aws.us_east_1 = aws.us_east_1
   }
 
-  domain_name    = var.domain_name
-  sub_domain     = var.sub_domain
-  use_cloudfront = var.use_cloudfront
+  domain_name     = var.domain_name
+  sub_domain      = var.sub_domain
+  use_cloudfront  = var.use_cloudfront
   target_dns_name = local.dns_target_name
   target_zone_id  = local.dns_target_zone_id
 }
@@ -207,6 +208,8 @@ module "ecs" {
 
   # Database
   db_secret_arn          = module.database.master_secret_arn
+  db_endpoint            = module.database.cluster_endpoint
+  db_port                = module.database.cluster_port
   db_database_name       = module.database.database_name
   pgvector_database_name = module.database.pgvector_database_name
 
@@ -229,10 +232,10 @@ module "ecs" {
   use_fargate_spot   = var.use_fargate_spot
 
   # ALB
-  alb_url                   = local.dify_url
-  api_target_group_arn      = module.alb.api_target_group_arn
+  alb_url                    = local.dify_url
+  api_target_group_arn       = module.alb.api_target_group_arn
   extension_target_group_arn = module.alb.extension_target_group_arn
-  web_target_group_arn      = module.alb.web_target_group_arn
+  web_target_group_arn       = module.alb.web_target_group_arn
 
   # Email (optional)
   email_smtp_secret_arn = var.setup_email ? module.email[0].smtp_secret_arn : null
@@ -256,7 +259,7 @@ locals {
   create_waf = var.use_cloudfront && (length(var.allowed_ipv4_cidrs) > 0 || length(var.allowed_ipv6_cidrs) > 0)
 
   # Certificate ARNs
-  main_certificate_arn = var.domain_name != null && !var.use_cloudfront ? module.dns[0].certificate_arn : null
+  main_certificate_arn       = var.domain_name != null && !var.use_cloudfront ? module.dns[0].certificate_arn : null
   cloudfront_certificate_arn = var.domain_name != null && var.use_cloudfront ? module.dns[0].cloudfront_certificate_arn : null
 
   # DNS record target
@@ -276,7 +279,7 @@ locals {
     var.domain_name != null
     ? "https://${var.sub_domain}.${var.domain_name}"
     : var.use_cloudfront
-      ? "https://${module.cloudfront[0].distribution_domain_name}"
-      : module.alb.alb_url
+    ? "https://${module.cloudfront[0].distribution_domain_name}"
+    : module.alb.alb_url
   )
 }

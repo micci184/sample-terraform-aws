@@ -77,7 +77,7 @@ variable "use_fargate_spot" {
 variable "dify_image_tag" {
   type        = string
   description = "Image tag for dify-api and dify-web containers."
-  default     = "1.11.4"
+  default     = "1.13.3"
 }
 
 variable "dify_sandbox_image_tag" {
@@ -89,7 +89,7 @@ variable "dify_sandbox_image_tag" {
 variable "dify_plugin_daemon_image_tag" {
   type        = string
   description = "Image tag for dify-plugin-daemon container."
-  default     = "0.5.2-local"
+  default     = "0.5.4-local"
 }
 
 variable "allow_any_syscalls" {

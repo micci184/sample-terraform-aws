@@ -35,9 +35,9 @@ resource "aws_ecs_task_definition" "web" {
 
   container_definitions = jsonencode([
     {
-      name      = "dify-web"
-      image     = local.web_image
-      essential = true
+      name         = "dify-web"
+      image        = local.web_image
+      essential    = true
       portMappings = [{ containerPort = local.web_port }]
       environment = [for k, v in {
         LOG_LEVEL           = "ERROR"

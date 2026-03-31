@@ -16,6 +16,26 @@ output "console_connect_command" {
   EOT
 }
 
+output "aws_region" {
+  description = "AWS region"
+  value       = var.aws_region
+}
+
+output "ecs_cluster_name" {
+  description = "ECS cluster name"
+  value       = module.ecs.cluster_name
+}
+
+output "api_service_name" {
+  description = "API ECS service name"
+  value       = module.ecs.api_service_name
+}
+
+output "web_service_name" {
+  description = "Web ECS service name"
+  value       = module.ecs.web_service_name
+}
+
 output "storage_bucket_name" {
   description = "S3 storage bucket name"
   value       = module.storage.storage_bucket_id

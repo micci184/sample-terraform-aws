@@ -5,10 +5,10 @@ data "aws_availability_zones" "available" {
 locals {
   azs = slice(data.aws_availability_zones.available.names, 0, var.max_azs)
 
-  create_vpc   = var.vpc_id == null
-  is_standard  = local.create_vpc && !var.vpc_isolated
-  is_isolated  = local.create_vpc && var.vpc_isolated
-  is_imported  = !local.create_vpc
+  create_vpc  = var.vpc_id == null
+  is_standard = local.create_vpc && !var.vpc_isolated
+  is_isolated = local.create_vpc && var.vpc_isolated
+  is_imported = !local.create_vpc
 
   vpc_id = (
     local.is_imported
@@ -28,8 +28,8 @@ locals {
     local.is_imported
     ? data.aws_subnets.private[0].ids
     : local.is_isolated
-      ? aws_subnet.isolated[*].id
-      : aws_subnet.private[*].id
+    ? aws_subnet.isolated[*].id
+    : aws_subnet.private[*].id
   )
 }
 

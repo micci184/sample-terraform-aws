@@ -3,3 +3,8 @@ variable "name_prefix" {
   description = "Prefix for S3 bucket names."
   default     = "dify"
 }
+
+variable "aws_region" {
+  type        = string
+  description = "AWS region for deployment."
+}

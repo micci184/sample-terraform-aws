@@ -32,6 +32,16 @@ variable "db_secret_arn" {
   description = "Secrets Manager ARN for Aurora master credentials"
 }
 
+variable "db_endpoint" {
+  type        = string
+  description = "Aurora cluster endpoint"
+}
+
+variable "db_port" {
+  type        = number
+  description = "Aurora cluster port"
+}
+
 variable "db_database_name" {
   type        = string
   description = "Default database name"
@@ -70,7 +80,7 @@ variable "broker_url_parameter_arn" {
 variable "dify_image_tag" {
   type        = string
   description = "Image tag for dify-api and dify-web"
-  default     = "1.11.4"
+  default     = "1.13.3"
 }
 
 variable "dify_sandbox_image_tag" {
@@ -82,7 +92,7 @@ variable "dify_sandbox_image_tag" {
 variable "dify_plugin_daemon_image_tag" {
   type        = string
   description = "Image tag for dify-plugin-daemon"
-  default     = "0.5.2-local"
+  default     = "0.5.4-local"
 }
 
 variable "custom_ecr_repository_name" {

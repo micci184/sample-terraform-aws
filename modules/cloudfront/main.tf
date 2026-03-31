@@ -30,11 +30,11 @@ locals {
 }
 
 resource "aws_cloudfront_distribution" "main" {
-  comment         = "Dify distribution (${var.aws_region})"
-  enabled         = true
-  web_acl_id      = var.web_acl_arn
-  aliases         = local.aliases
-  price_class     = "PriceClass_All"
+  comment     = "Dify distribution (${var.aws_region})"
+  enabled     = true
+  web_acl_id  = var.web_acl_arn
+  aliases     = local.aliases
+  price_class = "PriceClass_All"
 
   origin {
     domain_name = var.alb_dns_name

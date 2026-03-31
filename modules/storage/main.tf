@@ -2,8 +2,10 @@
 # Storage bucket (Dify application files, plugins)
 # ============================================================
 
+data "aws_caller_identity" "current" {}
+
 resource "aws_s3_bucket" "storage" {
-  bucket_prefix = "${var.name_prefix}-storage-"
+  bucket        = "${var.name_prefix}-storage-${data.aws_caller_identity.current.account_id}-${var.aws_region}"
   force_destroy = true
 
   tags = {
@@ -68,7 +70,7 @@ resource "aws_s3_object" "plugins_placeholder" {
 # ============================================================
 
 resource "aws_s3_bucket" "access_log" {
-  bucket_prefix = "${var.name_prefix}-access-log-"
+  bucket        = "${var.name_prefix}-access-log-${data.aws_caller_identity.current.account_id}-${var.aws_region}"
   force_destroy = true
 
   tags = {
@@ -80,9 +82,9 @@ resource "aws_s3_bucket_public_access_block" "access_log" {
   bucket = aws_s3_bucket.access_log.id
 
   block_public_acls       = true
-  block_public_policy     = true
+  block_public_policy     = false
   ignore_public_acls      = true
-  restrict_public_buckets = true
+  restrict_public_buckets = false
 }
 
 resource "aws_s3_bucket_server_side_encryption_configuration" "access_log" {
@@ -103,7 +105,9 @@ resource "aws_s3_bucket_ownership_controls" "access_log" {
   }
 }
 
-resource "aws_s3_bucket_policy" "access_log_ssl" {
+data "aws_elb_service_account" "main" {}
+
+resource "aws_s3_bucket_policy" "access_log" {
   bucket = aws_s3_bucket.access_log.id
 
   policy = jsonencode({
@@ -123,6 +127,15 @@ resource "aws_s3_bucket_policy" "access_log_ssl" {
             "aws:SecureTransport" = "false"
           }
         }
+      },
+      {
+        Sid    = "AllowALBLogs"
+        Effect = "Allow"
+        Principal = {
+          AWS = data.aws_elb_service_account.main.arn
+        }
+        Action   = "s3:PutObject"
+        Resource = "${aws_s3_bucket.access_log.arn}/*"
       }
     ]
   })
